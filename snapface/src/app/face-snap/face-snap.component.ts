@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FaceSnap } from './models/face-snap';
 
 @Component({
   selector: 'app-face-snap',
@@ -8,20 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './face-snap.component.scss'
 })
 export class FaceSnapComponent implements OnInit{
-  title!: String;
-  description!:string;
-  createdate!:Date;
-  snaps!:number;
-  imageUrl!:string;
+  
   onsnap!:boolean;
   buttontext!: string;
+  /*plus que les propriétés sont désormais 
+  dans le models/face-snap.ts il 
+  faudra les importées 
+  avec le décorateur @Input de la classe  
+  @angular/core*/
+  @Input() faceSnap!: FaceSnap;
 
   ngOnInit(): void {
-    this.title = "Bonjour ici elco codeur";
-    this.description = "premier composante que nous avons crée";
-    this.createdate = new Date;
-    this.snaps = 5;
-    this.imageUrl = 'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg';
+    
     this.onsnap = false;
     this.buttontext = "oh snap!"
 
@@ -37,13 +36,13 @@ export class FaceSnapComponent implements OnInit{
   }
 
   snap():void{
-    this.snaps++;
+    this.faceSnap.snaps++;
       this.buttontext = "oops unsnap!";
       this.onsnap = true;
   }
 
   unsnap(): void{
-    this.snaps--;
+    this.faceSnap.snaps--;
     this.onsnap =false;
     this.buttontext = "oh snap!"
   }
