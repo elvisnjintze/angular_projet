@@ -30,5 +30,6 @@ export class AppComponent implements OnInit{
           'assets/images/20240604_194419.jpg',
           new Date(),
           0);
+        this.lastSnap.setlocation('mon bureau à bonamoussadi')
   }
 }
