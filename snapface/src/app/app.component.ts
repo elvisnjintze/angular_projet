@@ -18,7 +18,7 @@ export class AppComponent implements OnInit{
       'Mon meilleur ami depuis tout petit !',
       'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
       new Date(),
-      0),
+      45),
       new FaceSnap( 'Elvis william njintze',
         'Moi meme je dérange !',
         'assets/images/20240604_175353.jpg',
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit{
           'Moi meme je dérange !',
           'assets/images/20240604_194419.jpg',
           new Date(),
-          0)];
+          200)];
     
     
         

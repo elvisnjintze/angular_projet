@@ -4,7 +4,7 @@
     <p>la description est: {{ faceSnap.description }}</p>
     <p>
         <button (click)="onaddsnaps()">{{buttontext}}</button>
-        👍 {{  faceSnap.snaps }}
+        <span [ngStyle]="{ color: 'rgb(0, ' + faceSnap.snaps + ', 0)' }">👍 {{  faceSnap.snaps }}</span>
     </p>
     @if (faceSnap.location){
         <p>photo prise dans: {{faceSnap.location}}</p>
