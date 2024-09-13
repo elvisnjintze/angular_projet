@@ -1,4 +1,4 @@
-<div class="face-snap-card">
+<div class="face-snap-card" [ngClass]="{ snapped: userHasSnapped }">
     <h1>le titre est: {{ faceSnap.title }}</h1>
     <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title">
     <p>la description est: {{ faceSnap.description }}</p>

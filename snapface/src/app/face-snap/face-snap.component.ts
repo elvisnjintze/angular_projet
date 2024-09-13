@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FaceSnap } from './models/face-snap';
-import { NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-face-snap',
   standalone: true,
-  imports: [NgStyle],
+  imports: [NgStyle,NgClass],
   templateUrl: './face-snap.component.html',
   styleUrl: './face-snap.component.scss'
 })
@@ -13,6 +13,7 @@ export class FaceSnapComponent implements OnInit{
   
   onsnap!:boolean;
   buttontext!: string;
+  userHasSnapped!: boolean;
   /*plus que les propriétés sont désormais 
   dans le models/face-snap.ts il 
   faudra les importées 
@@ -24,6 +25,7 @@ export class FaceSnapComponent implements OnInit{
     
     this.onsnap = false;
     this.buttontext = "oh snap!"
+    this.userHasSnapped = false;
 
   }
 
@@ -38,12 +40,14 @@ export class FaceSnapComponent implements OnInit{
 
   snap():void{
     this.faceSnap.snaps++;
+    this.userHasSnapped = true;
       this.buttontext = "oops unsnap!";
       this.onsnap = true;
   }
 
   unsnap(): void{
     this.faceSnap.snaps--;
+    this.userHasSnapped = false
     this.onsnap =false;
     this.buttontext = "oh snap!"
   }
