@@ -2,36 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaceSnapComponent } from './face-snap/face-snap.component';
 import { FaceSnap } from './face-snap/models/face-snap';
-
+import { FaceSnapListComponent } from './face-snap-list/face-snap-list.component';
+import { HeaderComponent } from './header/header.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FaceSnapComponent],
+  imports: [FaceSnapListComponent,HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
-  facesnap!: FaceSnap[];
+export class AppComponent {
  
-  ngOnInit(): void {
-    this.facesnap = [new FaceSnap( 'Fred kamga William',
-      'Mon meilleur ami depuis tout petit !',
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      new Date(),
-      45),
-      new FaceSnap( 'Elvis william njintze',
-        'Moi meme je dérange !',
-        'assets/images/20240604_175353.jpg',
-        new Date(),
-        0),
-        new FaceSnap( 'Elco Business & Technologies',
-          'Moi meme je dérange !',
-          'assets/images/20240604_194419.jpg',
-          new Date(),
-          200)];
-    
-    
-        
-        this.facesnap[1].setlocation('mon bureau à bonamoussadi')
-  }
 }
