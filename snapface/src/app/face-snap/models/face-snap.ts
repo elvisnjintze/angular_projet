@@ -5,6 +5,7 @@ export class FaceSnap{
     imageUrl: string;
     snaps: number;
     location?: string;
+    id: string;
 
     constructor(title:string,description:string,imageUrl:string,createdate:Date,snaps:number){
         this.title = title;
@@ -12,6 +13,7 @@ export class FaceSnap{
         this.imageUrl = imageUrl;
         this.createDate = createdate;
         this.snaps = snaps;
+        this.id = this.id = crypto.randomUUID().substring(0, 8);
     }
     setlocation(location:string):void{
         this.location = location;
@@ -19,5 +21,11 @@ export class FaceSnap{
     withlocation(location:string):FaceSnap{
         this.setlocation(location);
         return this
+    }
+    addSnap():void{
+        this.snaps++
+    }
+    removeSnap():void{
+        this.snaps--
     }
 }
