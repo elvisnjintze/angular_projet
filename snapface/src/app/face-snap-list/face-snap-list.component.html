@@ -1,5 +1,14 @@
-@for  (faceSnapelmt of facesnap; track faceSnapelmt.title) {
-    <app-face-snap [faceSnap]="faceSnapelmt"></app-face-snap>
-  
-  }
-  
+<!--Le pipe  async  souscrit à l'Observable, qui envoie la requête et qui émet la réponse :
+  *ngFor  récupère ensuite cette émission et l'affiche comme il le ferait avec n'importe quel tableau !-->
+<app-face-snap *ngFor="let faceSnap of facesnaps$ | async" [faceSnap]="faceSnap"></app-face-snap>
+<!--L'architecture que nous venons d'implémenter est connue sous plusieurs noms : smart/dumb,
+ container/presenter… peu importe le nom, le concept reste le même :un component parent interagit
+  avec le service pour récupérer les données – il s'agit du container, ou du component smart ;
+le parent consomme les Observables liés aux données (généralement avec le pipe  async  ) 
+pour envoyer des données synchrones à ses enfants (généralement via des  Input()  ) – les dumbs ou 
+presenters – qui n'interagissent pas avec les services ; ils se contentent d'afficher les données 
+qu'on leur donne. C'est ce que nous avons fait ici avec FaceSnapListComponent (smart) qui récupère 
+les données du service pour les dispatcher à ses enfants FaceSnapComponent (dumb).
+Il s'agit d'une architecture très courante dans les applications Angular, 
+car elle permet de séparer la logique dynamique (interactions service, etc.) 
+de la logique d'affichage.-->

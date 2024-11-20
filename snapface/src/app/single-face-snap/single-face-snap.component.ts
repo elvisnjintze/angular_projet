@@ -1,15 +1,16 @@
 
 import { Component, OnInit} from '@angular/core';
 import { FaceSnap } from '../face-snap/models/face-snap';
-import { DatePipe, NgClass, NgStyle, UpperCasePipe } from '@angular/common';
+import { CommonModule, DatePipe, NgClass, NgStyle, UpperCasePipe } from '@angular/common';
 import { FaceSnapsService } from '../services/face-snaps-service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
 @Component({
   selector: 'app-single-face-snap',
   standalone: true,
-  imports: [NgStyle,NgClass,UpperCasePipe,DatePipe,RouterLink],
+  imports: [NgStyle,NgClass,UpperCasePipe,DatePipe,RouterLink,CommonModule],
   templateUrl: './single-face-snap.component.html',
   styleUrl: './single-face-snap.component.scss'
 })
@@ -23,6 +24,8 @@ export class SingleFaceSnapComponent implements OnInit{
   avec le décorateur @Input de la classe  
   @angular/core*/
   faceSnap!: FaceSnap;
+  //nous récuperons le face snap depuis le serveur avec un observable
+  facesnap$!: Observable<FaceSnap>
   constructor(private faceSnapsService: FaceSnapsService, private route: ActivatedRoute){}
   /*ceci équivaut à créer une propiété privée dans la classe
   et de l'nitialiser parce que lorsqu'on appelle FaceSnapService
@@ -40,7 +43,9 @@ export class SingleFaceSnapComponent implements OnInit{
     this.buttontext = "oh snap!"
     this.userHasSnapped = false;
     const faceSnapId = this.route.snapshot.params['id']
-    this.faceSnap = this.faceSnapsService.getFaceSnapById(faceSnapId);
+    //this.faceSnap = this.faceSnapsService.getFaceSnapById(faceSnapId); on doit changer la méthode 
+    //on ira chercher le faceSnap dans le serveur 
+    this.facesnap$ = this.faceSnapsService.getFaceSnapById2(faceSnapId)
   }
 
   onaddsnaps(): void{

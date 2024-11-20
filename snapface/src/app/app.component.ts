@@ -4,10 +4,12 @@ import { FaceSnapComponent } from './face-snap/face-snap.component';
 import { FaceSnap } from './face-snap/models/face-snap';
 import { FaceSnapListComponent } from './face-snap-list/face-snap-list.component';
 import { HeaderComponent } from './header/header.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HeaderComponent],
+  imports: [RouterOutlet,HeaderComponent,ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

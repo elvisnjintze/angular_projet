@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FaceSnap } from '../face-snap/models/face-snap';
-import { find } from 'rxjs';
+import { find, Observable } from 'rxjs';
 import { SnapType } from '../face-snap/models/snap-type.type';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
 export class FaceSnapsService {
     private faceSnaps: FaceSnap[] = [
         // vos FaceSnap ici
@@ -40,11 +42,22 @@ export class FaceSnapsService {
                       new Date(),
                       200).withlocation('la boutique de wallas')
     ];
+    //on doit récupérer les données cette fois du serveur préconstruit à l'effet
+    //il tourne à l'@ http://localhost:3000
+    //nous utilisons le client http de typt HttpClient et un observable
+    //faceSnap$ car tout requete http à un serveur se fait de façon asynchrone
+    //et nous allons attendre la reponse serveur soit la requete complète càd succès 
+    //soit elle échoue alors dans ce cas elle se détruit
     
-    getFaceSnaps(): FaceSnap[] {
+  constructor(private http: HttpClient){}
+    
+    /**getFaceSnaps(): FaceSnap[] {
       return [...this.faceSnaps];
+    }**/
+    getFaceSnaps(): Observable<FaceSnap[]>{
+      return this.http.get<FaceSnap[]>('http://localhost:3000/facesnaps')
     }
-    
+
     snapFaceSnapById(facesnapid:string, snapType: SnapType):void{
         const foundSnapById = this.faceSnaps.find(faceSnap=>faceSnap.id == facesnapid);
         if (!foundSnapById){
@@ -60,6 +73,24 @@ export class FaceSnapsService {
         }
         return foundFaceSnap;
       }
+      //nous allons chercher un seul élément dans le serveur
+      getFaceSnapById2(faceSnapId: string): Observable<FaceSnap> {
+        
+        return this.http.get<FaceSnap>(`http://localhost:3000/facesnaps/${faceSnapId}`);
+      }
+
+      addFaceSnap(formValue: { title: string, description: string, imageUrl: string, location?: string }) {
+        /*const faceSnap:FaceSnap = {
+            ...formValue,
+            snaps: 0,
+            createDate: new Date(),
+            id: this.faceSnaps[this.faceSnaps.length - 1].id + 1
+        };*/
+        const faceSnap = new FaceSnap(formValue.title,formValue.description,formValue.imageUrl,new Date(),0)
+        const id = this.faceSnaps[this.faceSnaps.length - 1].id + 1
+          faceSnap.id = id
+        this.faceSnaps.push(faceSnap);
+    }
 }
 
 

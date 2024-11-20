@@ -1,4 +1,4 @@
-<div class="face-snap-card" [ngClass]="{ snapped: userHasSnapped }">
+<div class="face-snap-card" *ngIf="facesnap$ | async as faceSnap"[ngClass]="{ snapped: userHasSnapped }">
     <h1>le titre est: {{ faceSnap.title | uppercase }}</h1>
     <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title">
     <p>la description est: {{ faceSnap.description }}</p>
