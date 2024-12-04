@@ -4,7 +4,7 @@ import { FaceSnap } from '../face-snap/models/face-snap';
 import { CommonModule, DatePipe, NgClass, NgStyle, UpperCasePipe } from '@angular/common';
 import { FaceSnapsService } from '../services/face-snaps-service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 
 @Component({
@@ -48,26 +48,38 @@ export class SingleFaceSnapComponent implements OnInit{
     this.facesnap$ = this.faceSnapsService.getFaceSnapById2(faceSnapId)
   }
 
-  onaddsnaps(): void{
+  onaddsnaps(facesnapid:string): void{
     if (this.onsnap){
-     this.unsnap();
+     this.unsnap(facesnapid);
     }else{
-      this.snap();
+      this.snap(facesnapid);
     }  
   }
 
-  snap():void{
-    this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'snap');
-    this.userHasSnapped = true;
-      this.buttontext = "oops unsnap!";
-      this.onsnap = true;
+  snap(facesnapid:string):void{
+    //on obtient un nouveau observable qui découle de la requete put de la fction snapFacebyId qui est le 
+    //facesnap modifié et c'est ainsi pour toute requete put de HttpClient qui retourne toujours l'objet modifié
+    this.facesnap$ = this.faceSnapsService.snapFaceSnapById(facesnapid, 'snap').pipe(
+      tap(()=>{
+        this.userHasSnapped = true
+        this.buttontext = "oops unsnap!"
+        this.onsnap = true
+      })
+    )
+    
   }
 
-  unsnap(): void{
-    this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'unsnap');
-    this.userHasSnapped = false
-    this.onsnap =false;
-    this.buttontext = "oh snap!"
+  unsnap(facesnapid:string): void{
+    //on obtient un nouveau observable qui découle de la requete put de la fction snapFacebyId qui est le 
+    //facesnap modifié et c'est ainsi pour toute requete put de HttpClient qui retourne toujours l'objet modifié
+    this.facesnap$ = this.faceSnapsService.snapFaceSnapById(facesnapid, 'unsnap').pipe(
+      tap(()=>{
+        this.userHasSnapped = false
+        this.onsnap =false;
+        this.buttontext = "oh snap!"
+      })
+    );
+    
   }
 
 }

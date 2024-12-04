@@ -3,7 +3,7 @@
     <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title">
     <p>la description est: {{ faceSnap.description }}</p>
     <p>
-        <button (click)="onaddsnaps()">{{buttontext}}</button>
+        <button (click)="onaddsnaps(faceSnap.id)">{{buttontext}}</button>
         <span [ngStyle]="{ color: 'rgb(0, ' + faceSnap.snaps + ', 0)' }">👍 {{  faceSnap.snaps }}</span>
     </p>
     @if (faceSnap.location){

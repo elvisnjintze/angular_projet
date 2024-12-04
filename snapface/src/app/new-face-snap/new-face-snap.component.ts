@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { FaceSnap } from '../face-snap/models/face-snap';
 import { CommonModule } from '@angular/common';
 import { FaceSnapsService } from '../services/face-snaps-service';
@@ -28,7 +28,7 @@ export class NewFaceSnapComponent implements OnInit{
     this.snapForm =  this.formbuilder.group({
       title:[null,Validators.required],
       description: [null,Validators.required],
-      imageUrl: [null,Validators.required, Validators.pattern(this.urlRegex)],//on vérifie que l'url est 
+      imageUrl: [null,Validators.required, /*Validators.pattern(this.urlRegex)*/],//on vérifie que l'url est 
       //sous la forme de l'expression régulière énoncée dans urlRegex
       location: [null]
     },
@@ -49,7 +49,9 @@ export class NewFaceSnapComponent implements OnInit{
   );
   }
   onSubmitForm():void{
-    this.faceSnapsService.addFaceSnap(this.snapForm.value);
-    this.router.navigateByUrl('/facesnaps');
+    //on ajoute le facesnap si l'ajout est réussi alors se redirige vers
+    //la liste des snapface
+    this.faceSnapsService.addFaceSnap(this.snapForm.value).pipe
+    (tap(()=>this.router.navigateByUrl('/facesnaps'))).subscribe()
   }
 }

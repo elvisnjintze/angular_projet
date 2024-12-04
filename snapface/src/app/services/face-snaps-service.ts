@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FaceSnap } from '../face-snap/models/face-snap';
-import { find, Observable } from 'rxjs';
+import { find, map, Observable, switchMap } from 'rxjs';
 import { SnapType } from '../face-snap/models/snap-type.type';
 import { HttpClient } from '@angular/common/http';
 @Injectable({
@@ -58,13 +58,25 @@ export class FaceSnapsService {
       return this.http.get<FaceSnap[]>('http://localhost:3000/facesnaps')
     }
 
-    snapFaceSnapById(facesnapid:string, snapType: SnapType):void{
+    /*snapFaceSnapById(facesnapid:string, snapType: SnapType):void{
         const foundSnapById = this.faceSnaps.find(faceSnap=>faceSnap.id == facesnapid);
         if (!foundSnapById){
             throw new Error("ce facesnap n'existe pas")
         }
         foundSnapById.snap(snapType)
-    }
+    }*/
+   snapFaceSnapById(faceSnapId:string, snapType: SnapType):Observable<FaceSnap>{
+
+    return this.getFaceSnapById2(faceSnapId).pipe(
+      map(facesnap => ({
+        ...facesnap,
+        snaps: facesnap.snaps + (snapType=='snap'? 1: -1)
+      })),
+      switchMap(updatedFaceSnap => this.http.put<FaceSnap>( `http://localhost:3000/facesnaps/${faceSnapId}`,
+        updatedFaceSnap))
+    )
+
+   }
 
     getFaceSnapById(faceSnapId: string): FaceSnap {
         const foundFaceSnap = this.faceSnaps.find(faceSnap => faceSnap.id === faceSnapId);
@@ -79,17 +91,32 @@ export class FaceSnapsService {
         return this.http.get<FaceSnap>(`http://localhost:3000/facesnaps/${faceSnapId}`);
       }
 
-      addFaceSnap(formValue: { title: string, description: string, imageUrl: string, location?: string }) {
+      addFaceSnap(formValue: { title: string, description: string, imageUrl: string, location?: string }): Observable<FaceSnap> {
         /*const faceSnap:FaceSnap = {
             ...formValue,
             snaps: 0,
             createDate: new Date(),
             id: this.faceSnaps[this.faceSnaps.length - 1].id + 1
         };*/
-        const faceSnap = new FaceSnap(formValue.title,formValue.description,formValue.imageUrl,new Date(),0)
+       /* const faceSnap = new FaceSnap(formValue.title,formValue.description,formValue.imageUrl,new Date(),0)
         const id = this.faceSnaps[this.faceSnaps.length - 1].id + 1
           faceSnap.id = id
-        this.faceSnaps.push(faceSnap);
+        this.faceSnaps.push(faceSnap);*/
+        return this.getFaceSnaps().pipe(
+          map(facesnaps => [...facesnaps].sort((a,b)=>(Number(a.id) - Number(b.id)))),
+          map(sortedfacesnaps => sortedfacesnaps[sortedfacesnaps.length-1]),
+          /*map(previousfacesnap => ({
+            ...formValue,
+            snaps: 0,
+            id: previousfacesnap.id +1
+          }))*/
+         map(previousfacesnap => ({'snap':new FaceSnap(formValue.title,formValue.description,formValue.imageUrl,new Date(),0),
+                                  'id': previousfacesnap.id + 1
+         })),
+         map(objet => ({...objet['snap'], id: objet['id']})),
+         switchMap(objet => this.http.post<FaceSnap>('http://localhost:3000/facesnaps',objet))
+        )
+
     }
 }
 
