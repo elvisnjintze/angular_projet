@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FaceSnapComponent } from './face-snap/face-snap.component';
-import { FaceSnap } from './face-snap/models/face-snap';
-import { FaceSnapListComponent } from './face-snap-list/face-snap-list.component';
-import { HeaderComponent } from './header/header.component';
+import { FaceSnapComponent } from './face-snaps/components/face-snap/face-snap.component';
+import { FaceSnap } from './core/models/face-snap';
+import { FaceSnapListComponent } from './face-snaps/components/face-snap-list/face-snap-list.component';
+import { HeaderComponent } from './core/components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,5 +15,5 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
- 
+
 }
